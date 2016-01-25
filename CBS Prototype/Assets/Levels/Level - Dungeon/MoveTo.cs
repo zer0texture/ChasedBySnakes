@@ -46,7 +46,7 @@ public class MoveTo : MonoBehaviour {
     Ray snakeRay;
 
     PlayerController pCont;
-    public bool isAttacking = false;
+    public bool canAttack = true;
 
 
 	// Use this for initialization
@@ -263,41 +263,43 @@ public class MoveTo : MonoBehaviour {
     {
         if (goal == null)
         {
-            isAttacking = false;
+            canAttack = true;   //-
         }
         else
         {
-            transform.LookAt(goal.position);                    //Look at our players position
+            Vector3 tempVec = new Vector3(goal.position.x,transform.position.y, goal.position.z);
+            transform.LookAt(tempVec);                    //Look at our players position
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
             agent.destination = goal.position;                  //Set our path destination to the players position
             print("attacking player");
 
-            if (playerDist > 5.0f)      //If ssnake is too far from target to attack, isattacking = false
-            {
-                isAttacking = false;
-            }
-
-            if ((playerDist < 4.0f) && (!isAttacking))  //If snake is near player and not attacking, start attacking
-            {
-                isAttacking = true;
-                atkStart = Time.time;
-            }
-        }
-
-        if (isAttacking)    //If snake is attacking, do attack and update player Hp every 3 seconds.
-        {
-            
-            atkTime = Time.time;
-            //if ((atkStart + 1.0f) <= atkTime)
+            //if (playerDist > 5.0f)      //If ssnake is too far from target to attack, canAttack = false
             //{
-                
-            //    print("Attack!");
-            //    pCont.updatePlayerHp(snakeDmg);
-            //    //print(snakeDmg);
-            //    //atkStart = Time.time;
-            //    isAttacking = false;
+            //    canAttack = true;//-
             //}
+
+            if ((playerDist < 5.0f) && (canAttack))  //If snake is near player and not attacking, start attacking
+            {
+                pCont.updatePlayerHp(snakeDmg);
+                canAttack = false;//-
+                atkStart = Time.time;
+
+                if (!canAttack)    //If snake cant attack, start attack cooldown
+                {
+                    atkTime = Time.time;
+                    if ((atkStart + 1.0f) <= atkTime)
+                    {
+
+                        print("Attack!");
+                        //pCont.updatePlayerHp(snakeDmg);
+                        //print(snakeDmg);
+                        //atkStart = Time.time;
+                        canAttack = true; //-
+                    }
+                }
+            }
         }
+
 
         if (attackDebug == true)                            
         {
