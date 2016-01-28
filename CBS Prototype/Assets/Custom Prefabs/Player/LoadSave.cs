@@ -8,9 +8,10 @@ using System.Xml.Serialization;
 
 static class LoadSave{
 
-    public static playerSave.playerStats savedGame;
+   // public static playerSave.playerStats savedGame;
 
     public static void Save() {
+        /*
         Debug.Log("Saving");
         savedGame = playerSave.GetCurrent();
 
@@ -20,9 +21,11 @@ static class LoadSave{
         Serialisation.Serialize(sw, savedGame);
         Debug.Log(savedGame.ToString());
         sw.Close();
+        */
     }
     public static void Load()
     {
+        /*
         if (File.Exists(Application.persistentDataPath + "/gameSaves.cbs"))
         {
             Debug.Log("Loading");
@@ -43,10 +46,10 @@ static class LoadSave{
             Debug.Log(savedGame.pPos);
              //savedGame[0].pPos;
              * */
-            playerSave.Load(savedGame);
+            //playerSave.Load(savedGame);
             //file.Close();
 
-        }
+        //}
     }
 }
 
