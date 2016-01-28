@@ -16,7 +16,7 @@ public class playerMovementController : MonoBehaviour
     public float lookSensitivity;
     public static float xRot;
     public static float yRot;
-
+ 
     void Start()
     {
 
@@ -33,36 +33,55 @@ public class playerMovementController : MonoBehaviour
 
     void holdKeyCheck()
     {
-
         //-- KeyDown --//
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetAxis("Vertical") < -0.5)
         {
             forward = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetAxis("Vertical") > 0.5)
         {
             back = true;
         }
-
-        if (Input.GetKeyDown(KeyCode.A))
+    
+        if (Input.GetAxis("Horizontal") < -0.2)
         {
             left = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetAxis("Horizontal") > 0.2)
         {
             right = true;
         }
+       
+      //if (Input.GetKeyDown(KeyCode.W)) //|| (Input.GetAxis("Vertical") < -0.5))
+      //  {
+      //      forward = true;
+      //  }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+      //  if (Input.GetKeyDown(KeyCode.S))// || (Input.GetAxis("JoystickLeftStickVertical") > 0.5))
+      //  {
+      //      back = true;
+      //  }
+
+      //  if (Input.GetKeyDown(KeyCode.A)) // || (Input.GetAxis("JoystickLeftStickHorizontal") < -0.5))
+      //  {
+      //      left = true;
+      //  }
+
+      //  if (Input.GetKeyDown(KeyCode.D))// || (Input.GetAxis("JoystickLeftStickHorizontal") > 0.5))
+      //  {
+      //      right = true;
+      //  }
+
+        if (Input.GetButtonDown("Jump")/*Input.GetKeyDown(KeyCode.Space)*/)
         {
             jump = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetButtonDown("Interact"))
         {
-            //use = true;
+            use = true;
         }
 
         //if (Input.GetKeyDown(KeyCode.Escape))
@@ -71,58 +90,81 @@ public class playerMovementController : MonoBehaviour
         //}
 
         //-- KeyUp --//
-
-        if (Input.GetKeyUp(KeyCode.W))
+        if (Input.GetAxis("Vertical") > -0.5)
         {
             forward = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.S))
+        if (Input.GetAxis("Vertical") < 0.5)
         {
             back = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetAxis("Horizontal") > -0.2)
         {
             left = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.D))
+        if (Input.GetAxis("Horizontal") < 0.2)
         {
             right = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+       //if (Input.GetKeyUp(KeyCode.W)) //|| (Input.GetAxis("JoystickLeftStickVertical") > -0.5))
+       // {
+       //     forward = false;
+       // }
+
+       // if (Input.GetKeyUp(KeyCode.S)) //|| (Input.GetAxis("JoystickLeftStickVertical") < 0.5))
+       // {
+       //     back = false;
+       // }
+
+       // if (Input.GetKeyUp(KeyCode.A))// || (Input.GetAxis("JoystickLeftStickHorizontal") > -0.5))
+       // {
+       //     left = false;
+       // }
+
+       // if (Input.GetKeyUp(KeyCode.D))// || (Input.GetAxis("JoystickLeftStickHorizontal") < 0.5))
+       // {
+       //     right = false;
+       // }
+
+        if (Input.GetButtonUp("Jump")/*Input.GetKeyUp(KeyCode.Space)*/)
         {
             jump = false;
         }
 
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetButtonUp("Interact"))
         {
-            use = true;
+            use = false;
         }
     }
 
     void toggleKeyCheck()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetButtonUp("Lantern"))
         {
-
-            if (lantern)
-            {
+           if (lantern)
+           {
                 lantern = false;
-            }
-            else
-            {
-                lantern = true;
-            }
-        }
+           }
+           else
+          {
+               lantern = true;
+          }
+       }
     }
   
     void mouseLook()
     {
         xRot -= Input.GetAxis("Mouse Y") * lookSensitivity;                   //Rotational axis to equal mouse axis
-        yRot += Input.GetAxis("Mouse X") * lookSensitivity;                   //Rotational axis to equal mouse axis
+        //float newYRot = Input.GetAxis("Mouse X") * lookSensitivity;
+        float mouseY = Input.GetAxis("Mouse X");
+        //if(Mathf.Abs(mouseY) > 1.5f)
+            yRot += mouseY * lookSensitivity;//previousYRot - newYRot;                   //Rotational axis to equal mouse axis
+       // previousYRot = newYRot;
+      //  Debug.Log(newYRot);
     }
 
     void OnLevelWasLoaded(int level)
