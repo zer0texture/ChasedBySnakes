@@ -40,7 +40,7 @@ public class InGameMenu : MonoBehaviour
 
 
         //check if pause button (escape key) is pressed
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetButtonUp("Pause"))
         {
             isInGameMainMenu = true;
             isInGameOptions = false;
