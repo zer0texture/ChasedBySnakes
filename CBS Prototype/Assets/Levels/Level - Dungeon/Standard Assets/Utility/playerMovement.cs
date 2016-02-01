@@ -29,8 +29,9 @@ public class playerMovement : MonoBehaviour
     void FixedUpdate()
     {
         movement();
-        mouseLook();
         jump();
+        mouseLook();
+        
         stairGravity();
 
 
@@ -117,7 +118,7 @@ public class playerMovement : MonoBehaviour
 
     void mouseLook()
     {
-        transform.rotation = Quaternion.Euler(0, playerMovementController.yRot, 0);
+       transform.rotation = Quaternion.Euler(0, playerMovementController.yRot, 0);
     }
 
 
