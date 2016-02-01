@@ -15,6 +15,13 @@ public class PlayerSpawner : MonoBehaviour {
 
     public bool deathDebug = false;
 
+    void Awake()
+    {
+        playerSpawned = false;
+        pSpawnVis = playerSpawned;
+        playerInst = null;
+    }
+
 
 	void Start () {
 	

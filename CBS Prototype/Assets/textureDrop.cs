@@ -47,6 +47,10 @@ public class textureDrop : MonoBehaviour
 
     void dropTexture()
     {
+        if(Time.timeScale < 0.1f)
+        {
+            return;
+        }
         switch (m_texType)
         {
             case (TextureType.BLOOD):
@@ -80,6 +84,7 @@ public class textureDrop : MonoBehaviour
                                 //newFootprint.transform.Rotate(Vector3.up, 180);//TEMP FIX FOR ROTATED TEXTURES
                                 newFootprint = Instantiate(m_footprintPrefab, myRay.point, transform.rotation) as GameObject;
                                 newFootprint.transform.Rotate(Vector3.up, 180);
+                                
                                 Vector3 newScale = transform.localScale;
                                 newScale.x = -1f;
                                 newScale.y = 0.001f;
@@ -97,12 +102,11 @@ public class textureDrop : MonoBehaviour
                                 newFootprint.transform.Rotate(Vector3.up, 180);
 
 
-
-
                             }
                             newFootprint.name = "footprint " + m_footprintIndex;
                             m_RightFootPrint = (!m_RightFootPrint);
                             print(m_RightFootPrint);
+                            newFootprint.transform.parent = myRay.transform;
                             m_footprintIndex++;
                         }
                     }
