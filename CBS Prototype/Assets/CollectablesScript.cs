@@ -33,7 +33,9 @@ public class CollectablesScript : buttonScript
         if (m_State == InspectorState.INSPECTING)
         {
             Vector3 currentRot = transform.rotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(currentRot.x + (playerMovementController.xRot - m_PreviousMouseRot.x) * m_WorkingTimescale, currentRot.y + (playerMovementController.yRot - m_PreviousMouseRot.y) * m_WorkingTimescale, 0.0f);
+            Vector3 newRot = new Vector3(playerMovementController.xRot - m_PreviousMouseRot.x, playerMovementController.yRot - m_PreviousMouseRot.y, 0.0f);
+            transform.Rotate(Camera.main.transform.right, newRot.x * m_WorkingTimescale);
+            transform.Rotate(Camera.main.transform.up, newRot.y * m_WorkingTimescale);
             m_PreviousMouseRot = new Vector3(playerMovementController.xRot, playerMovementController.yRot, 0.0f);
 
             if (m_WorkingTimescale != Time.timeScale && Time.timeScale != m_IgnoreTimeScale)
