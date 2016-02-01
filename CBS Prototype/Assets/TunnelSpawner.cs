@@ -5,37 +5,88 @@ using System.Collections.Generic;
 public class TunnelSpawner : MonoBehaviour {
 
     public const int Max_Tunnel = 100;
-    const int NUMBER_OF_TUNNELS = 7;
+    const int NUMBER_OF_TUNNELS = 4;        //1 MORE THAN THE NUMBER OF TUNNELS IN RESOURCES FOLDER
+    public float tunnelSpeed = 0.1f;
+    public bool tunnelStarted = false;
+    public bool tunnelCreated = false;
+    public bool tunnelFinished = false;
+    public bool tunnelMode = false;
+    int tunnelName = Max_Tunnel;
+
+    GameObject tunnelPlayer;
+
     List<GameObject> tunnel;
     Quaternion nullQuart;
     GameObject tempOBJ;
 
 	// Use this for initialization
 	void Start () {
-        tunnel = new List<GameObject>();
-
-        print("Started tunnel 0");
-        tempOBJ = (Resources.Load("TunnelSections/" + Random.Range(1, NUMBER_OF_TUNNELS)) as GameObject);
-        tempOBJ.transform.position = transform.position;
-        tunnel.Add(Instantiate(tempOBJ));
-        //tunnel[0].transform.position.Set()
-        print("created tunnel 0");
-
-        for (int i = 1; i < Max_Tunnel; i++)
+        if (!tunnelStarted)
         {
-            print("Started tunnel " + i);
+            tunnel = new List<GameObject>();
+          //  print("Started tunnel 0");
             tempOBJ = (Resources.Load("TunnelSections/" + Random.Range(1, NUMBER_OF_TUNNELS)) as GameObject);
+            tempOBJ.transform.position = transform.position;
             tunnel.Add(Instantiate(tempOBJ));
-            tunnel[i].name = ("tunnel " + i);
-            print("created tunnel" + i);
-            tunnel[i].transform.position = tunnel[i - 1].transform.position;
-            tunnel[i].gameObject.transform.Translate((tunnel[i].gameObject.GetComponent<Renderer>().bounds.extents.x + tunnel[i - 1].gameObject.GetComponent<Renderer>().bounds.extents.x), 0, 0);
-            
+            tunnel[0].name = ("tunnel " + 0);
+            //tunnel[0].transform.position.Set()
+          //  print("created tunnel 0");
+
+            for (int i = 1; i < Max_Tunnel; i++)
+            {
+              //  print("Started tunnel " + i);
+                tempOBJ = (Resources.Load("TunnelSections/" + Random.Range(1, NUMBER_OF_TUNNELS)) as GameObject);
+                tunnel.Add(Instantiate(tempOBJ));
+                tunnel[i].name = ("tunnel " + i);
+             //  print("created tunnel" + i);
+                tunnel[i].transform.position = tunnel[i - 1].transform.position;
+                tunnel[i].gameObject.transform.Translate(((tunnel[i].gameObject.GetComponent<Renderer>().bounds.extents.x + tunnel[i - 1].gameObject.GetComponent<Renderer>().bounds.extents.x)), 0, 0);
+              //  print("Max Tunnel = " + Max_Tunnel + " tunnel count = " + tunnel.Count);
+            }
         }
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+    void Update()
+    {
+        if (tunnelMode)
+        {
+            /*
+            foreach(GameObject t in tunnel)
+            {
+                t.transform.Translate(Vector3.left);
+            }
+             * */
+            for (int i = 0; i < tunnel.Count; i++)
+            {
+                tunnel[i].transform.Translate(Vector3.left * tunnelSpeed * Time.timeScale);
+                if (tunnel[i].transform.position.x < transform.position.x - 100)
+                {
+                    Destroy(tunnel[0]);
+                    tunnel.RemoveAt(0);
+                    i--;
+                    //print(tunnel.Count);
+
+                }
+            }
+            //print("tunnel count/Max Tunnel " + tunnel.Count + " " + Max_Tunnel);
+            print("Max tunnel: " + Max_Tunnel + "   tunnel count " + tunnel.Count);
+            if (tunnel.Count < Max_Tunnel)
+            {
+                print("WE GOT THERE");
+                int tempInt = Random.Range(1, NUMBER_OF_TUNNELS);
+                print(tempInt);
+                tempOBJ = (Resources.Load("TunnelSections/" + tempInt) as GameObject);
+                tempOBJ.transform.position = tunnel[tunnel.Count - 1].transform.position;
+                tempOBJ.name = ("tunnel " + (tunnelName));
+                tunnelName++;
+                float offset = tempOBJ.gameObject.GetComponent<Renderer>().bounds.extents.x + tunnel[tunnel.Count - 1].gameObject.GetComponent<Renderer>().bounds.extents.x;
+                tempOBJ.gameObject.transform.Translate(offset, 0, 0);
+                tunnel.Add(Instantiate(tempOBJ));
+
+            }
+
+
+        }
+    }
 }
