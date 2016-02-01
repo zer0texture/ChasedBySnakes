@@ -114,11 +114,27 @@ public class UISlider : MonoBehaviour, GameSaveManager.IGameSaver
 
         if (sliderType == SliderType.HEALTH_BAR)
         {
-            slider.value = m_Bar_Health;
+            if (slider)
+            {
+                slider.value = m_Bar_Health;
+            }
+            else
+            {
+                GetComponent<Image>().fillAmount = (float)((float)m_Bar_Health / (float)m_Slider_Health);
+            }
         }
+
         if (sliderType == SliderType.OIL_BAR)
         {
-            slider.value = m_Bar_Oil;
+            if (slider)
+            {
+                slider.value = m_Bar_Oil;
+            }
+            else
+            {
+                GetComponent<Image>().fillAmount = (float)((float)m_Bar_Oil / (float)m_Slider_MaxOil);
+            }
+
         }
 
 
