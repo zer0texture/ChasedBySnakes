@@ -45,6 +45,10 @@ public class cameraV3 : MonoBehaviour {
 	
 	void FixedUpdate () 
     {
+        if (player == null)
+        {
+            return;
+        }
         cameraMove();
         cameraLook();
         cameraBanding();
