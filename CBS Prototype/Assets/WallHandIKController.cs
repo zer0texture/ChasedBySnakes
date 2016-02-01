@@ -53,18 +53,22 @@ public class WallHandIKController : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
         if(Physics.Raycast(ray, out hit, m_ViewDist))
         {
-            
-            handPos1 = hit.point;
-            weight1 = (m_ViewDist - hit.distance) / m_ViewDist;
+            if (!hit.collider.isTrigger)
+            {
+                handPos1 = hit.point;
+                weight1 = (m_ViewDist - hit.distance) / m_ViewDist;
+            }
         }
 
         ray = new Ray(transform.position + transform.up * 3, transform.forward * 1.5f + transform.right * 0.4f);
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
         if (Physics.Raycast(ray, out hit, m_ViewDist))
         {
-
-            handPos2 = hit.point;
-            weight2 = (m_ViewDist - hit.distance) / m_ViewDist;
+            if (!hit.collider.isTrigger)
+            {
+                handPos2 = hit.point;
+                weight2 = (m_ViewDist - hit.distance) / m_ViewDist;
+            }
         }
 
         float finalWeight = Mathf.Max(weight1, weight2);
@@ -105,18 +109,22 @@ public class WallHandIKController : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
         if (Physics.Raycast(ray, out hit, m_ViewDist))
         {
-
-            handPos1 = hit.point;
-            weight1 = (m_ViewDist - hit.distance) / m_ViewDist;
+            if (!hit.collider.isTrigger)
+            {
+                handPos1 = hit.point;
+                weight1 = (m_ViewDist - hit.distance) / m_ViewDist;
+            }
         }
 
         ray = new Ray(transform.position + transform.up * 3, transform.forward * 1.5f - transform.right * 0.4f);
         Debug.DrawRay(ray.origin, ray.direction, Color.yellow);
         if (Physics.Raycast(ray, out hit, m_ViewDist))
         {
-
-            handPos2 = hit.point;
-            weight2 = (m_ViewDist - hit.distance) / m_ViewDist;
+            if (!hit.collider.isTrigger)
+            {
+                handPos2 = hit.point;
+                weight2 = (m_ViewDist - hit.distance) / m_ViewDist;
+            }
         }
 
         finalWeight = Mathf.Max(weight1, weight2);
