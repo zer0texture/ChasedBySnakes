@@ -11,7 +11,7 @@ public class trapTrigger : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	snakeSpawning = GetComponent<SpawnSnake>();
-    snakeSpawning.enabled = false;
+    snakeSpawning.isTriggered = false;
 	}
 	
 	// Update is called once per frame
@@ -24,8 +24,7 @@ public class trapTrigger : MonoBehaviour {
         if (playerInRange())
         {
             Debug.Log(playerInRange());
-            snakeSpawning.enabled = true;
-            snakeSpawning.isTrap = true;
+            snakeSpawning.isTriggered = true;
         }
 	}
 
