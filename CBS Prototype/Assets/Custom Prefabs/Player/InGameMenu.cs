@@ -13,9 +13,17 @@ public class InGameMenu : MonoBehaviour
     public bool isInGameOptionsDisplay;
 
     Font pauseMenuFont;
-    public Texture aTexture;
-    public Texture bTexture;
+    public Texture inGameMenu_Resume;
+    public Texture inGameMenu_Load;
+    public Texture inGameMenu_Save;
+    public Texture inGameMenu_Options;
+    public Texture inGameMenu_ReturnToMenu;
+    public Texture inGameMenu_Quit;
+    public Texture inGameMenu_Audio;
+    public Texture inGameMenu_Display;
+    public Texture inGameMenu_Back;
 
+    public GUISkin inGameMenuSkin;
     AudioSource playerAS;
 
     void Start()
@@ -65,20 +73,21 @@ public class InGameMenu : MonoBehaviour
     void OnGUI()
     {
 
-        GUI.skin.box.font = pauseMenuFont;
-        GUI.skin.button.font = pauseMenuFont;
-        GUI.backgroundColor = Color.white;
-        GUI.skin.box.border.left = 1;
-        GUI.skin.box.border.right = 1;
-        GUI.skin.box.border.top = 1;
+        //GUI.skin.box.font = pauseMenuFont;
+        //GUI.skin.button.font = pauseMenuFont;
+        //GUI.backgroundColor = Color.white;
+        //GUI.skin.box.border.left = 1;
+        //GUI.skin.box.border.right = 1;
+        //GUI.skin.box.border.top = 1;
+        GUI.skin = inGameMenuSkin;
 
         if (pauseEnabled == true)
         {
             if (isInGameMainMenu == true)
             {                        
-                GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 150, 250, 300), aTexture);
+                GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 150, 250, 300), "");
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 40), bTexture))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 40), inGameMenu_Resume))
                 {
                     pauseEnabled = false;
                     Time.timeScale = 1;
@@ -86,7 +95,7 @@ public class InGameMenu : MonoBehaviour
                     AudioListener.pause = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 60, 250, 40), "Load Last Save"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 60, 250, 40), inGameMenu_Load))
                 {
                     GameSaveManager.m_Instance.StartLoading();
                     GameSaveManager.SceneState save = new GameSaveManager.SceneState();
@@ -95,7 +104,7 @@ public class InGameMenu : MonoBehaviour
 
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 20, 250, 40), "Save Game"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 20, 250, 40), inGameMenu_Save))
                 {
                     GameSaveManager.SceneState sceneSave = new GameSaveManager.SceneState();
                     sceneSave.m_SceneNo = Application.loadedLevel;
@@ -103,18 +112,18 @@ public class InGameMenu : MonoBehaviour
                     GameSaveManager.m_Instance.SaveGame();
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 20, 250, 40), "Options"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 20, 250, 40), inGameMenu_Options))
                 {
                     isInGameOptions = true;
                     isInGameMainMenu = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 250, 40), "Return to Main Menu"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 250, 40), inGameMenu_ReturnToMenu))
                 {
                     Application.LoadLevel(0);
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 110, 250, 40), "Quit to Windows"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 110, 250, 40), inGameMenu_Quit))
                 {
                     Application.Quit();
                 }
@@ -123,18 +132,18 @@ public class InGameMenu : MonoBehaviour
             {                    
                 GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 150, 250, 300), "OPTIONS");
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 50), "Audio Settings"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 50), inGameMenu_Audio))
                 {
                     isInGameOptionsAudio = true;
                     isInGameOptions = false;
                 }
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 250, 50), "Display Settings"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 250, 50), inGameMenu_Display))
                 {
                     isInGameOptionsDisplay = true;
                     isInGameOptions = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), "Back"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), inGameMenu_Back))
                 {
                     isInGameOptions = false;
                     isInGameMainMenu = true;
@@ -158,7 +167,7 @@ public class InGameMenu : MonoBehaviour
                 GUI.Label(new Rect((Screen.width / 2) - 60, 200, 100, 20), "0");
                 GUI.Label(new Rect((Screen.width / 2) + 105, 200, 100, 20), "100");
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), "Back"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), inGameMenu_Back))
                 {
                     isInGameOptionsAudio = false;
                     isInGameOptions = true;
@@ -177,7 +186,7 @@ public class InGameMenu : MonoBehaviour
                 {
                     Screen.SetResolution(1920, 1080, true);
                 }
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), "Back"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), inGameMenu_Back))
                 {
                     isInGameOptionsDisplay = false;
                     isInGameOptions = true;

@@ -15,6 +15,19 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
 
     static public float currentVolume = 1.0F;
 
+    public GUISkin mainMenuSkin;
+
+    public Texture mainMenu_NewGame;
+    public Texture mainMenu_LoadGame;
+    public Texture mainMenu_Sliders;
+    public Texture mainMenu_Options;
+    //public Texture mainMenu_ReturnToDesktop;
+    public Texture mainMenu_Quit;
+    public Texture mainMenu_Back;
+    public Texture mainMenu_Audio;
+    public Texture mainMenu_Display;
+
+
     public enum MenuOption
     {
         MENU_CONTINUE,
@@ -46,17 +59,17 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
 
     void OnGUI()
     {
-
-            if (isMainMenu == true)
+        GUI.skin = mainMenuSkin;
+        if (isMainMenu == true)
             {                     
-                GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "Main Menu");
+                GUI.Box(new Rect(0, 0, Screen.width, Screen.height), ""/*MainMenuTexture*/);
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 40), "New Game"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 40), mainMenu_NewGame))
                 {
                     Application.LoadLevel(2);                
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 60, 250, 40), "Load Last Save"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 60, 250, 40), mainMenu_LoadGame))
                 {
                     GameSaveManager.m_Instance.StartLoading();
                     GameSaveManager.SceneState save = new GameSaveManager.SceneState();
@@ -64,31 +77,32 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
                     Application.LoadLevel(save.m_SceneNo);
             }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 20, 250, 40), "Sliders"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 20, 250, 40), mainMenu_Sliders))
                 {
                     isMainMenuSliders = true;
                     isMainMenu = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 20, 250, 40), "Options"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 20, 250, 40), mainMenu_Options))
                 {
                     isMainMenuOptions = true;
                     isMainMenu = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 250, 40), "Return to Main Menu"))
+                /*if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 250, 40), mainMenu_ReturnToDesktop))
                 {
                     Application.LoadLevel(0);
-                }
+                }*/
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 110, 250, 40), "Quit to Windows"))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 110, 250, 40), mainMenu_Quit))
                 {
                     Application.Quit();
                 }
             }
 
                 if(isMainMenuSliders == true)
-                    {               
+                    {
+                    
                         GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "SLIDERS");
 
                         sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50,  50, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.HEALTH), 0.0F, barMaxSliderValue);
@@ -126,7 +140,7 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
                                 GUI.Label(new Rect((Screen.width / 2) - 60, 250, 100, 20), "0");
                                 GUI.Label(new Rect((Screen.width / 2) + 105, 250, 100, 20), "10");
 
-                         if (GUI.Button(new Rect(Screen.width / 2 - 100, 300, 250, 50), "Back"))
+                         if (GUI.Button(new Rect(Screen.width / 2 - 100, 300, 250, 50), mainMenu_Back))
                         {
                             isMainMenuSliders = false;
                             isMainMenu = true;
@@ -138,17 +152,17 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
                     {                       
                         GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "OPTIONS");
 
-                    if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 50), "Audio Settings"))
+                    if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 50), mainMenu_Audio))
                         {
                             isMainMenuOptionsAudio = true;
                             isMainMenuOptions = false;
                         }
-                        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 250, 50), "Display Settings"))
+                        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 250, 50), mainMenu_Display))
                         {
 
                         }
 
-                        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), "Back"))
+                        if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), mainMenu_Back))
                         {
                             isMainMenuOptions = false;
                             isMainMenu = true;
@@ -165,7 +179,7 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
                             GUI.Label(new Rect((Screen.width / 2) - 60, 110, 100, 20), "0");
                             GUI.Label(new Rect((Screen.width / 2) + 105, 110, 100, 20), "100");
 
-                            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), "Back"))
+                            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 100, 250, 50), mainMenu_Back))
                             {
                                 isMainMenuOptionsAudio = false;
                                 isMainMenuOptions = true;
