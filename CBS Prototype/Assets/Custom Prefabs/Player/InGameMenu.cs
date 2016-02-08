@@ -87,7 +87,7 @@ public class InGameMenu : MonoBehaviour
             {                        
                 GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 150, 250, 300), "");
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 40), inGameMenu_Resume))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 130, 250, 40), inGameMenu_Resume))
                 {
                     pauseEnabled = false;
                     Time.timeScale = 1;
@@ -95,7 +95,7 @@ public class InGameMenu : MonoBehaviour
                     AudioListener.pause = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 60, 250, 40), inGameMenu_Load))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 90, 250, 40), inGameMenu_Load))
                 {
                     GameSaveManager.m_Instance.StartLoading();
                     GameSaveManager.SceneState save = new GameSaveManager.SceneState();
@@ -104,7 +104,7 @@ public class InGameMenu : MonoBehaviour
 
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 20, 250, 40), inGameMenu_Save))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 250, 40), inGameMenu_Save))
                 {
                     GameSaveManager.SceneState sceneSave = new GameSaveManager.SceneState();
                     sceneSave.m_SceneNo = Application.loadedLevel;
@@ -112,18 +112,18 @@ public class InGameMenu : MonoBehaviour
                     GameSaveManager.m_Instance.SaveGame();
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 20, 250, 40), inGameMenu_Options))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 10, 250, 40), inGameMenu_Options))
                 {
                     isInGameOptions = true;
                     isInGameMainMenu = false;
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 70, 250, 40), inGameMenu_ReturnToMenu))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 30, 250, 40), inGameMenu_ReturnToMenu))
                 {
                     Application.LoadLevel(0);
                 }
 
-                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 110, 250, 40), inGameMenu_Quit))
+                if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 + 80, 250, 40), inGameMenu_Quit))
                 {
                     Application.Quit();
                 }
