@@ -8,15 +8,23 @@ public class WallHandIKController : MonoBehaviour
     public GameObject m_RightHandTarget;
     public GameObject m_LeftHandTarget;
     //public bool m_HandOnWall;
-    public float m_LerpTime = 2.0f;
-    public float m_LerpResetDist = 2.0f;
+    public float m_HandLerpTime = 2.0f;
+    public float m_HandLerpResetDist = 2.0f;
 
     public float m_ViewDist = 5.0f;
 
-    private float m_TimerRight = 0.0f;
-    private float m_TimerLeft = 0.0f;
+    private float m_HandTimerRight = 0.0f;
+    private float m_HandTimerLeft = 0.0f;
     private Vector3 m_PreviousRightHandTargetPos;
     private Vector3 m_PreviousLeftHandTargetPos;
+
+    public float m_RotateLerpTime = 1.5f;
+    private float m_RotateTimer = 0.0f;
+
+    bool m_Forward = playerMovementController.forward;
+    bool m_Back = playerMovementController.back;
+    bool m_Left = playerMovementController.left;
+    bool m_Right = playerMovementController.right;
 
     // Use this for initialization
     void Start()
@@ -33,6 +41,77 @@ public class WallHandIKController : MonoBehaviour
     {
         // for (and if) when we will have hand animation
         //animator.SetBool("RightHandWall", m_HandOnWall);
+
+        bool forward = playerMovementController.forward;
+        bool back = playerMovementController.back;
+        bool left = playerMovementController.left;
+        bool right = playerMovementController.right;
+
+
+        m_RotateTimer += Time.deltaTime;
+
+        if (forward || back)
+        {
+            float direction = 1;
+            if (forward)
+            {
+                animator.SetFloat("Forward Innertia", 1.0f);
+            }
+            else
+            {
+                animator.SetFloat("Forward Innertia", - 1.0f);
+                direction = -1;
+            }
+            if (left || right)
+            {
+                if (left)
+                {
+                    transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0.0f, -45.0f * direction, 0.0f), m_RotateTimer / m_RotateLerpTime);
+                    animator.SetFloat("Side Innertia", -0.5f);
+                }
+                else
+                {
+                    transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0.0f, 45.0f * direction, 0.0f), m_RotateTimer / m_RotateLerpTime);
+                    animator.SetFloat("Side Innertia", 0.5f);
+                }
+            }
+            else
+            {
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0.0f, 0.0f, 0.0f), m_RotateTimer / m_RotateLerpTime);
+                animator.SetFloat("Forward Innertia", 1.0f);
+                animator.SetFloat("Side Innertia", 0.0f);
+            }
+
+        }
+        else if (left || right)
+        {
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0.0f, 0.0f, 0.0f), m_RotateTimer / m_RotateLerpTime);
+            animator.SetFloat("Forward Innertia", 0.0f);
+            if (left)
+            {
+                animator.SetFloat("Side Innertia", -1.0f);
+            }
+            else
+            {
+                animator.SetFloat("Side Innertia", 1.0f);
+            }
+        }
+        else
+        {
+            Debug.Log("MOVING NOT");
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0.0f, 0.0f, 0.0f), m_RotateTimer / m_RotateLerpTime);
+            animator.SetFloat("Forward Innertia", 0.0f);
+            animator.SetFloat("Side Innertia", 0.0f);
+        }
+
+        if (m_Forward != forward || left != m_Left || m_Right != right || m_Back != back)
+        {
+            m_RotateTimer = 0.0f;
+            m_Forward = forward;
+            m_Back = back;
+            m_Left = left;
+            m_Right = right;
+        }
     }
 
 
@@ -77,13 +156,13 @@ public class WallHandIKController : MonoBehaviour
             finalPos = handPos1;
         else
             finalPos = handPos2;
-        if (finalWeight == 0 || m_TimerRight >= m_LerpTime || Vector3.Distance(m_PreviousRightHandTargetPos, finalPos) >= m_LerpResetDist)
+        if (finalWeight == 0 || m_HandTimerRight >= m_HandLerpTime || Vector3.Distance(m_PreviousRightHandTargetPos, finalPos) >= m_HandLerpResetDist)
         {
-            m_TimerRight = 0.0f;
+            m_HandTimerRight = 0.0f;
         }
 
-        m_RightHandTarget.transform.position = Vector3.Lerp(m_RightHandTarget.transform.position, finalPos, m_TimerRight / m_LerpTime);
-        m_TimerRight += Time.deltaTime;
+        m_RightHandTarget.transform.position = Vector3.Lerp(m_RightHandTarget.transform.position, finalPos, m_HandTimerRight / m_HandLerpTime);
+        m_HandTimerRight += Time.deltaTime;
 
         m_PreviousRightHandTargetPos = finalPos;
 
@@ -134,13 +213,13 @@ public class WallHandIKController : MonoBehaviour
         else
             finalPos = handPos2;
 
-        if (finalWeight == 0 || m_TimerLeft >= m_LerpTime || Vector3.Distance(m_PreviousLeftHandTargetPos, finalPos) >= m_LerpResetDist)
+        if (finalWeight == 0 || m_HandTimerLeft >= m_HandLerpTime || Vector3.Distance(m_PreviousLeftHandTargetPos, finalPos) >= m_HandLerpResetDist)
         {
-            m_TimerLeft = 0.0f;
+            m_HandTimerLeft = 0.0f;
         }
 
-        m_LeftHandTarget.transform.position = Vector3.Lerp(m_LeftHandTarget.transform.position, finalPos, m_TimerLeft / m_LerpTime);
-        m_TimerLeft += Time.deltaTime;
+        m_LeftHandTarget.transform.position = Vector3.Lerp(m_LeftHandTarget.transform.position, finalPos, m_HandTimerLeft / m_HandLerpTime);
+        m_HandTimerLeft += Time.deltaTime;
 
         m_PreviousLeftHandTargetPos = finalPos;
 

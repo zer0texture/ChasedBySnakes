@@ -35,7 +35,7 @@ public class playerMovement : MonoBehaviour
         stairGravity();
 
 
-        anim.speed = rb.velocity.magnitude / 6;
+        //anim.speed = rb.velocity.magnitude / 6;
     }
 
     void movement()
