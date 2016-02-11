@@ -12,6 +12,7 @@ public class playerMovementController : MonoBehaviour
     public static bool use;
     public static bool jump;
     public static bool lantern;
+    public static bool powerLantern;
 
     public float lookSensitivity;
     public static float xRot;
@@ -154,6 +155,18 @@ public class playerMovementController : MonoBehaviour
                lantern = true;
           }
        }
+
+        if(Input.GetButtonUp("Power Lantern"))
+        {
+            if (powerLantern)
+            {
+                powerLantern = false;
+            }
+            else
+            {
+                powerLantern = true;
+            }
+        }
     }
   
     void mouseLook()
