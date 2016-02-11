@@ -56,6 +56,11 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
         Save();
         
     }
+   
+    void Update()
+    { 
+        
+    }
 
     void OnGUI()
     {
@@ -66,7 +71,7 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
 
                 if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 250, 40), mainMenu_NewGame))
                 {
-                    Application.LoadLevel(2);                
+                    Application.LoadLevel(1);                
                 }
 
                 if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 60, 250, 40), mainMenu_LoadGame))
@@ -105,42 +110,42 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
                     
                         GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "SLIDERS");
 
-                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50,  50, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.HEALTH), 0.0F, barMaxSliderValue);
+                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 150, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.HEALTH), 0.0F, barMaxSliderValue);
                         UISlider.SetSliderValue(UISlider.SliderType.HEALTH, sliderValue);
 
-                                GUI.Label(new Rect((Screen.width / 2) - 45, 30, 300, 20), "Amount of Player Health");
-                                GUI.Label(new Rect((Screen.width / 2) - 60, 50, 100, 20), "0");
-                                GUI.Label(new Rect((Screen.width / 2) + 105, 50, 100, 20), "100");
+                                GUI.Label(new Rect((Screen.width / 2) - 45, (Screen.height / 2) - 170, 300, 20), "Amount of Player Health");
+                                GUI.Label(new Rect((Screen.width / 2) - 60, (Screen.height / 2) - 150, 100, 20), "0");
+                                GUI.Label(new Rect((Screen.width / 2) + 105, (Screen.height / 2) - 150, 100, 20), "100");
 
-                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50,  100, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.OIL_MAX), 0.0F, barMaxSliderValue);
+                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 110, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.OIL_MAX), 0.0F, barMaxSliderValue);
                         UISlider.SetSliderValue(UISlider.SliderType.OIL_MAX, sliderValue);
 
-                                GUI.Label(new Rect((Screen.width / 2) - 35, 80, 300, 20), "Amount of Player Oil");
-                                GUI.Label(new Rect((Screen.width / 2) - 60, 100, 100, 20), "0");
-                                GUI.Label(new Rect((Screen.width / 2) + 105, 100, 100, 20), "100");
+                                GUI.Label(new Rect((Screen.width / 2) - 35, (Screen.height / 2) - 130, 300, 20), "Amount of Player Oil");
+                                GUI.Label(new Rect((Screen.width / 2) - 60, (Screen.height / 2) - 110, 100, 20), "0");
+                                GUI.Label(new Rect((Screen.width / 2) + 105, (Screen.height / 2) - 110, 100, 20), "100");
 
-                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50,  150, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.NUM_OF_SNAKES), 0.0F, snakeMaxSliderValue);
+                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 70, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.NUM_OF_SNAKES), 0.0F, snakeMaxSliderValue);
                         UISlider.SetSliderValue(UISlider.SliderType.NUM_OF_SNAKES, sliderValue);
 
-                                GUI.Label(new Rect((Screen.width / 2) - 30, 130, 300, 20), "Number of Snakes");
-                                GUI.Label(new Rect((Screen.width / 2) - 60, 150, 100, 20), "0");
-                                GUI.Label(new Rect((Screen.width / 2) + 105, 150, 100, 20), "50");
+                                GUI.Label(new Rect((Screen.width / 2) - 30, (Screen.height / 2) - 90, 300, 20), "Number of Snakes");
+                                GUI.Label(new Rect((Screen.width / 2) - 60, (Screen.height / 2) - 70, 100, 20), "0");
+                                GUI.Label(new Rect((Screen.width / 2) + 105, (Screen.height / 2) - 70, 100, 20), "50");
 
-                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, 200, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.LANTERN_SIZE), 0.0F, otherMaxSliderValue);
+                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 30, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.LANTERN_SIZE), 0.0F, otherMaxSliderValue);
                         UISlider.SetSliderValue(UISlider.SliderType.LANTERN_SIZE, sliderValue);
 
-                                GUI.Label(new Rect((Screen.width / 2) - 30, 180, 300, 20), "Player Lantern Size");
-                                GUI.Label(new Rect((Screen.width / 2) - 60, 200, 100, 20), "0");
-                                GUI.Label(new Rect((Screen.width / 2) + 105, 200, 100, 20), "10");
+                                GUI.Label(new Rect((Screen.width / 2) - 30, (Screen.height / 2) - 50, 300, 20), "Player Lantern Size");
+                                GUI.Label(new Rect((Screen.width / 2) - 60, (Screen.height / 2) - 30, 100, 20), "0");
+                                GUI.Label(new Rect((Screen.width / 2) + 105, (Screen.height / 2) - 30, 100, 20), "10");
 
-                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, 250, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.LENGTH_OF_TRAIL), 0.0F, otherMaxSliderValue);
+                        sliderValue = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, (Screen.height / 2) + 10, 150, 30), UISlider.GetSliderValue(UISlider.SliderType.LENGTH_OF_TRAIL), 0.0F, otherMaxSliderValue);
                         UISlider.SetSliderValue(UISlider.SliderType.LENGTH_OF_TRAIL, sliderValue);
 
-                                GUI.Label(new Rect((Screen.width / 2) - 35, 230, 300, 20), "Length of Player Trail");
-                                GUI.Label(new Rect((Screen.width / 2) - 60, 250, 100, 20), "0");
-                                GUI.Label(new Rect((Screen.width / 2) + 105, 250, 100, 20), "10");
+                                GUI.Label(new Rect((Screen.width / 2) - 35, (Screen.height / 2) - 10, 300, 20), "Length of Player Trail");
+                                GUI.Label(new Rect((Screen.width / 2) - 60, (Screen.height / 2) + 10, 100, 20), "0");
+                                GUI.Label(new Rect((Screen.width / 2) + 105, (Screen.height / 2) + 10, 100, 20), "10");
 
-                         if (GUI.Button(new Rect(Screen.width / 2 - 100, 300, 250, 50), mainMenu_Back))
+                         if (GUI.Button(new Rect(Screen.width / 2 - 100, (Screen.height / 2) + 50, 250, 50), mainMenu_Back))
                         {
                             isMainMenuSliders = false;
                             isMainMenu = true;
@@ -173,7 +178,7 @@ public class GUIMainMenu : MonoBehaviour, GameSaveManager.IGameSaver
                         {
                             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "AUDIO SETTINGS");
 
-                            AudioListener.volume = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, 110, 150, 30), AudioListener.volume, 0.0F, 1.0F);
+                            AudioListener.volume = GUI.HorizontalSlider(new Rect((Screen.width / 2) - 50, (Screen.height / 2) - 150, 150, 30), AudioListener.volume, 0.0F, 1.0F);
                             currentVolume = AudioListener.volume;
                             GUI.Label(new Rect(Screen.width / 2, 90, 100, 20), "VOLUME");
                             GUI.Label(new Rect((Screen.width / 2) - 60, 110, 100, 20), "0");
