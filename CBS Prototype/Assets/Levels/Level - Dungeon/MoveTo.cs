@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MoveTo : MonoBehaviour {
-    public enum State {wander, Hunt, Attack, Flee}
+    public enum State {wander, Hunt, Attack}
     public State snakeAI = State.wander;
     // GLOBAL VARIABLES:
 
@@ -29,19 +29,6 @@ public class MoveTo : MonoBehaviour {
     public bool hasGoal = false;
     public bool attackDebug;
 
-    bool snakeSpooked;
-
-    float snakeSpeed = 2.5f;
-    float snakeSpeedTurn = 120.0f;
-    float snakeSpeedSpooked = 5.0f;
-    float snakeSpeedSpookedTurn = 600.0f;
-
-    public GameObject player;
-    customTimer timer;
-
-    Vector3 distPlayerSnake;
-
-    int spookedDestCount;
 
     //TEMP VARIABLES
     float snakeFOV = 0.4f;
@@ -68,10 +55,8 @@ public class MoveTo : MonoBehaviour {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         if(PlayerSpawner.playerInst)
             pCont = PlayerSpawner.playerInst.GetComponent<PlayerController>();
-
         
-        timer = GetComponent<customTimer>();
-        //player = GameObject.Find("loadedPlayer");
+    
 	}
 	
 	// Update is called once per frame 
@@ -82,7 +67,7 @@ public class MoveTo : MonoBehaviour {
         raycastRight = transform.right * snakeFOV + transform.forward;
         raycastLeft = -transform.right * snakeFOV + transform.forward;
 
-        /*Debug.DrawRay(transform.position - originreset, raycastUp * lookDist, Color.blue);
+        Debug.DrawRay(transform.position - originreset, raycastUp * lookDist, Color.blue);
         Debug.DrawRay(transform.position - originreset, raycastDown * lookDist, Color.green);
         Debug.DrawRay(transform.position - originreset, raycastLeft * lookDist, Color.yellow);
         Debug.DrawRay(transform.position - originreset, raycastRight * lookDist, Color.red);
@@ -91,7 +76,7 @@ public class MoveTo : MonoBehaviour {
         Debug.DrawRay(transform.position - originreset, (raycastUp + raycastLeft) * (lookDist / 2), Color.blue);
         Debug.DrawRay(transform.position - originreset, (raycastUp + raycastRight) * (lookDist / 2), Color.green);
         Debug.DrawRay(transform.position - originreset, (raycastDown + raycastLeft) * (lookDist / 2), Color.yellow);
-        Debug.DrawRay(transform.position - originreset, (raycastDown + raycastRight) * (lookDist / 2), Color.red);*/
+        Debug.DrawRay(transform.position - originreset, (raycastDown + raycastRight) * (lookDist / 2), Color.red);
 
         //OnTriggerEnter();
         switch (snakeAI)                                                            //State machine for snake AI
@@ -110,10 +95,6 @@ public class MoveTo : MonoBehaviour {
                 snakeAttack();
                 snakeGoalUpdate();
                
-            break;
-            case State.Flee:
-            snakeFlee();
-            snakeGoalUpdate();
             break;
         }
 	}
@@ -151,28 +132,28 @@ public class MoveTo : MonoBehaviour {
         if (Physics.Raycast(transform.position - originreset, raycastUp, out hasHit, lookDist) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, raycastDown, out hasHit, lookDist) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, raycastLeft, out hasHit, lookDist) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, raycastRight, out hasHit, lookDist) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
@@ -181,41 +162,41 @@ public class MoveTo : MonoBehaviour {
         if (Physics.Raycast(transform.position - originreset, (raycastUp + raycastLeft), out hasHit, (lookDist / 2)) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, (raycastUp + raycastRight), out hasHit, (lookDist / 2)) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, (raycastDown + raycastLeft), out hasHit, (lookDist / 2)) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, (raycastDown + raycastRight), out hasHit, (lookDist / 2)) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else if (Physics.Raycast(transform.position - originreset, transform.forward, out hasHit, lookDist) && (hasHit.collider.name == "loadedPlayer"))
         {
 
-            //print("can see player");
+            print("can see player");
             return true;
         }
 
         else
         {
-            //print("Cant see player");
+            print("Cant see player");
             return false;
         }
         
@@ -223,32 +204,26 @@ public class MoveTo : MonoBehaviour {
 
     void snakeGoalUpdate()
     {
-        
         if (goal == null && PlayerSpawner.playerInst != null)
         {
             goal = PlayerSpawner.playerInst.transform;
             pCont = goal.GetComponent<PlayerController>();
         }
-        
-        if(!snakeSpooked)
+        if (canSeePlayer())             //Can we see player?
         {
-            if (canSeePlayer())             //Can we see player?
-            {
-                snakeAI = State.Attack;
-            }
-
-            else if (canHearPlayer())       //Can't see player, can we hear them?
-            {
-                snakeAI = State.Hunt;
-            }
-
-            else                            //Can't see or hear player, so wander around.
-            {
-                snakeAI = State.wander;
-
-            }
+            snakeAI = State.Attack;
         }
-        
+
+        else if (canHearPlayer())       //Can't see player, can we hear them?
+        { 
+            snakeAI = State.Hunt;
+        }
+
+        else                            //Can't see or hear player, so wander around.
+        {
+            snakeAI = State.wander;
+            
+        }
 
     }
     void snakeWander()
@@ -272,7 +247,7 @@ public class MoveTo : MonoBehaviour {
 
     void snakeHunt()
     {
-        //print("Hunting Player");
+        print("Hunting Player");
         //NewTarget = goal.position;
         //NewTarget = new Vector3(goal.position.x + (Random.Range(-10.0f, 10.0f) * Vector3.Distance(transform.position, goal.position)), 
         //                        goal.position.y + (Random.Range(-10.0f, 10.0f) * Vector3.Distance(transform.position, goal.position)),
@@ -296,7 +271,7 @@ public class MoveTo : MonoBehaviour {
             transform.LookAt(tempVec);                    //Look at our players position
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
             agent.destination = goal.position;                  //Set our path destination to the players position
-            //print("attacking player");
+            print("attacking player");
 
             //if (playerDist > 5.0f)      //If ssnake is too far from target to attack, canAttack = false
             //{
@@ -315,7 +290,7 @@ public class MoveTo : MonoBehaviour {
                     if ((atkStart + 1.0f) <= atkTime)
                     {
 
-                        //print("Attack!");
+                        print("Attack!");
                         //pCont.updatePlayerHp(snakeDmg);
                         //print(snakeDmg);
                         //atkStart = Time.time;
@@ -349,82 +324,6 @@ public class MoveTo : MonoBehaviour {
 
             }
         }
-    }
-
-    void snakeFlee()
-    {
-        // -- Run away while the snake has been spooked -- //
-        if (snakeSpooked)
-        {
-            // -- Change how the snake moves -- //
-            NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.speed = snakeSpeedSpooked;
-            agent.angularSpeed = snakeSpeedSpookedTurn;
-            agent.autoBraking = false;
-            // -- Update the snakes destination to move to -- //
-            if (!hasGoal)
-            {
-                float distCheck2 = Vector3.Distance(transform.position, goal.position);
-                NewTarget = (Random.insideUnitSphere * (distCheck2 - 0.1f));
-                float distCheck1 = Vector3.Distance(NewTarget, goal.position);
-                
-
-                if(distCheck1 > distCheck2)
-                {
-                    agent.destination = NewTarget;
-                    hasGoal = true;
-                }
-                //print("Finding New Goal");
-                //distPlayerSnake = (transform.position + goal.forward);
-                //NewTarget = distPlayerSnake * 2 + (Random.insideUnitSphere * WanderRadius);
-                
-            }
-            // -- Snake now heads away from the player -- // 
-            print("Going to Goal");
-            Debug.DrawLine(player.transform.position, distPlayerSnake, Color.blue);
-            Debug.DrawLine(NewTarget + Vector3.up * 4, transform.position + Vector3.up * 4, Color.green);
-
-            // -- The snake will try to reach 3 destinations, and then revert back to wander -- //
-            if (spookedDestCount == 3)
-            {
-                snakeSpooked = false;
-                spookedDestCount = 0;
-                print("No Longer Spooked");
-            }
-
-            // -- After a random amount of time, the snake will look for a new position -- //
-            if (timer.ourTimer(Random.Range(3, 6)))
-            {
-                hasGoal = false;
-                spookedDestCount++;
-                print("Goal Reached");
-            }
-        }
-        // -- Revert all the snake movement changes and go back to wandering around -- //
-        if (!snakeSpooked)
-        {
-            NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.speed = snakeSpeed;
-            agent.angularSpeed = snakeSpeedTurn;
-            agent.autoBraking = true;
-            snakeAI = State.wander;
-            hasGoal = false;
-            print("No longer spooked");
-        }
-
-    }
-
-    // -- First time snakes have been hit by lantern make them spooky -- // 
-    // -- Once spooked, the lantern will not spook again until the effect has worn off -- //
-    public void hitByPowerLantern()
-    {
-        if (!snakeSpooked)
-        {
-            snakeAI = State.Flee;
-            hasGoal = false;
-            snakeSpooked = true;
-        }
-
     }
 }
 
