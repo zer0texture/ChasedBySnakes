@@ -11,7 +11,8 @@ public class lantern : MonoBehaviour, GameSaveManager.IGameSaver {
 
     public bool debugLantern = false;
 
-
+    public GameObject pLantern;
+    bool pLanternActive;
 
     [System.Serializable]
     public class LanternSave : GameSaveManager.IGameSave
@@ -67,7 +68,29 @@ public class lantern : MonoBehaviour, GameSaveManager.IGameSaver {
         else
         {
             spotlight.enabled = false;
-            
+            playerMovementController.powerLantern = false;
+
+        }
+
+        if (playerMovementController.powerLantern)
+        {
+            if (spotlight.enabled)
+            {
+                pLantern.SetActive(true);
+                pLanternActive = true;
+                print("POWER LANTERN ON");
+            }
+            else
+            {
+                pLantern.SetActive(false);
+                pLanternActive = false;
+                print("POWER LANTERN OFF");
+            }
+        }
+        else
+        {
+            pLantern.SetActive(false);
+            pLanternActive = false;
         }
     }
 
@@ -84,6 +107,10 @@ public class lantern : MonoBehaviour, GameSaveManager.IGameSaver {
             if (spotlight.enabled)
             {
                     currentOil -= oilConsumption * Time.deltaTime;
+                if (pLanternActive)
+                {
+                    currentOil -= oilConsumption * Time.deltaTime; // Doubles the draining rate of oil
+                }
             }
         }
 

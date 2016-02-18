@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MoveTo : MonoBehaviour {
-    public enum State {wander, Hunt, Attack}
+    public enum State {wander, Hunt, Attack, Flee}
     public State snakeAI = State.wander;
     // GLOBAL VARIABLES:
 
@@ -29,6 +29,19 @@ public class MoveTo : MonoBehaviour {
     public bool hasGoal = false;
     public bool attackDebug;
 
+    bool snakeSpooked;
+
+    float snakeSpeed = 2.5f;
+    float snakeSpeedTurn = 120.0f;
+    float snakeSpeedSpooked = 5.0f;
+    float snakeSpeedSpookedTurn = 600.0f;
+
+    public GameObject player;
+    customTimer timer;
+
+    Vector3 distPlayerSnake;
+
+    int spookedDestCount;
 
     //TEMP VARIABLES
     float snakeFOV = 0.4f;
@@ -55,9 +68,11 @@ public class MoveTo : MonoBehaviour {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         if(PlayerSpawner.playerInst)
             pCont = PlayerSpawner.playerInst.GetComponent<PlayerController>();
-        
-    
-	}
+
+        timer = GetComponent<customTimer>();
+        //player = GameObject.Find("loadedPlayer");
+    }
+
 	
 	// Update is called once per frame 
 	void Update () {
@@ -209,23 +224,40 @@ public class MoveTo : MonoBehaviour {
             goal = PlayerSpawner.playerInst.transform;
             pCont = goal.GetComponent<PlayerController>();
         }
-        if (canSeePlayer())             //Can we see player?
+        if (!snakeSpooked)
         {
-            snakeAI = State.Attack;
-        }
+            if (canSeePlayer())             //Can we see player?
+            {
+                snakeAI = State.Attack;
+            }
 
-        else if (canHearPlayer())       //Can't see player, can we hear them?
-        { 
-            snakeAI = State.Hunt;
-        }
+            /* if (canSeePlayer())             //Can we see player?
+             {
+                 snakeAI = State.Attack;
+             }*/
 
-        else                            //Can't see or hear player, so wander around.
-        {
-            snakeAI = State.wander;
-            
-        }
+            else if (canHearPlayer())       //Can't see player, can we hear them?
+            {
+                snakeAI = State.Hunt;
+            }
+            if (canSeePlayer())             //Can we see player?
+            {
+                snakeAI = State.Attack;
+            }
 
+            else if (canHearPlayer())       //Can't see player, can we hear them?
+            {
+                snakeAI = State.Hunt;
+            }
+
+            else                            //Can't see or hear player, so wander around.
+            {
+                snakeAI = State.wander;
+
+            }
+        }
     }
+
     void snakeWander()
     {
         if (hasGoal == false)      //Can't hear or see player, Wander around. 
@@ -325,7 +357,83 @@ public class MoveTo : MonoBehaviour {
             }
         }
     }
+    void snakeFlee()
+    {
+        // -- Run away while the snake has been spooked -- //
+        if (snakeSpooked)
+        {
+            // -- Change how the snake moves -- //
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.speed = snakeSpeedSpooked;
+            agent.angularSpeed = snakeSpeedSpookedTurn;
+            agent.autoBraking = false;
+            // -- Update the snakes destination to move to -- //
+            if (!hasGoal)
+            {
+                float distCheck2 = Vector3.Distance(transform.position, goal.position);
+                NewTarget = (Random.insideUnitSphere * (distCheck2 - 0.1f));
+                float distCheck1 = Vector3.Distance(NewTarget, goal.position);
+
+
+                if (distCheck1 > distCheck2)
+                {
+                    agent.destination = NewTarget;
+                    hasGoal = true;
+                }
+                //print("Finding New Goal");
+                //distPlayerSnake = (transform.position + goal.forward);
+                //NewTarget = distPlayerSnake * 2 + (Random.insideUnitSphere * WanderRadius);
+
+            }
+            // -- Snake now heads away from the player -- // 
+            print("Going to Goal");
+            Debug.DrawLine(player.transform.position, distPlayerSnake, Color.blue);
+            Debug.DrawLine(NewTarget + Vector3.up * 4, transform.position + Vector3.up * 4, Color.green);
+
+            // -- The snake will try to reach 3 destinations, and then revert back to wander -- //
+            if (spookedDestCount == 3)
+            {
+                snakeSpooked = false;
+                spookedDestCount = 0;
+                print("No Longer Spooked");
+            }
+
+            // -- After a random amount of time, the snake will look for a new position -- //
+            if (timer.ourTimer(Random.Range(3, 6)))
+            {
+                hasGoal = false;
+                spookedDestCount++;
+                print("Goal Reached");
+            }
+        }
+        // -- Revert all the snake movement changes and go back to wandering around -- //
+        if (!snakeSpooked)
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.speed = snakeSpeed;
+            agent.angularSpeed = snakeSpeedTurn;
+            agent.autoBraking = true;
+            snakeAI = State.wander;
+            hasGoal = false;
+            print("No longer spooked");
+        }
+
+    }
+
+    // -- First time snakes have been hit by lantern make them spooky -- // 
+    // -- Once spooked, the lantern will not spook again until the effect has worn off -- //
+    public void hitByPowerLantern()
+    {
+        if (!snakeSpooked)
+        {
+            snakeAI = State.Flee;
+            hasGoal = false;
+            snakeSpooked = true;
+        }
+
+    }
 }
+
 
 
 
